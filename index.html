@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="module">
+        import { add, fibonacci as fibonacciWASM } from "./build/release.js";
+
+        function main() {
+            const result = add(1, 2);
+            const fib = fibonacciWASM(5);
+
+            document.getElementById("add-result").innerHTML = result;
+            document.getElementById("fibonacci-result").innerHTML = fib;
+        }
+
+        function localAdd(a, b) {
+            const result = add(a, b);
+            document.getElementById("add-result").innerHTML = result;
+        }
+
+        function localFibonacci(n) {
+            const fib = fibonacciWASM(n);
+            document.getElementById("fibonacci-result").innerHTML = fib;
+        }
+
+        function fibonacci(a) {
+            return a < 2 ? a : fibonacci(a - 1) + fibonacci(a - 2);
+        }
+
+        function benchmarkFibonacci(n) {
+            // t0 => JS
+            const t0Start = performance.now();
+            fibonacci(n);
+            const t0End = performance.now();
+
+
+            // t1 => WASM
+            const t1Start = performance.now();
+            fibonacciWASM(n);
+            const t1End = performance.now();
+
+
+            document.getElementById("benchmark-js-result").innerHTML = t0End - t0Start;
+            document.getElementById("benchmark-wasm-result").innerHTML = t1End - t1Start;
+        }
+
+        window.main = main;
+        window.localAdd = localAdd;
+        window.localFibonacci = localFibonacci;
+        window.benchmarkFibonacci = benchmarkFibonacci;
+        main();
+    </script>
+</head>
+
+<body>
+    <div>add</div>
+    <div id="add-result"></div>
+
+    <hr>
+
+    <div>fibonacci</div>
+    <div id="fibonacci-result"></div>
+
+    <hr>
+
+    <button onclick="localAdd(3,4)">add(3,4)</button>
+    <button onclick="localFibonacci(10)">fibonacci(10)</button>
+
+    <hr>
+
+    <div>
+        Benchmark: JS Fibonacci vs WASM Fibonacci
+    </div>
+
+    <div>
+        <button onclick="benchmarkFibonacci(30)">benchmarkFibonacci(30)</button>
+    </div>
+
+    <div>result</div>
+    <div>benchmark-js-result: <span id="benchmark-js-result"></span> milliseconds</div>
+    <div>benchmark-wasm-result: <span id="benchmark-wasm-result"></span> milliseconds</div>
+</body>
+
+</html>

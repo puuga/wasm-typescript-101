@@ -1,0 +1,33 @@
+{
+  "name": "wasm-typescript-101",
+  "version": "1.0.0",
+  "description": "TypeScript-like x WebAssembly",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests",
+    "asbuild:debug": "asc assembly/index.ts --target debug",
+    "asbuild:release": "asc assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "start": "npx serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puuga/wasm-typescript-101.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/puuga/wasm-typescript-101/issues"
+  },
+  "homepage": "https://github.com/puuga/wasm-typescript-101#readme",
+  "devDependencies": {
+    "assemblyscript": "^0.20.6"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
+  }
+}
